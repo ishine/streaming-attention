@@ -200,7 +200,7 @@ class MoChA(torch.nn.Module):
             self.mask = to_device(self, make_pad_mask(enc_hs_len))
         e.masked_fill_(self.mask, -float('inf'))
         # Optionally add pre-sigmoid noise to the scores
-        e += self.sigmoid_noise * to_device(self,torch.normal(mean=torch.zeros(score.shape), std=1))
+        e += self.sigmoid_noise * to_device(self,torch.normal(mean=torch.zeros(e.shape), std=1))
         p = torch.sigmoid(e)
         # safe_cumprod computes cumprod in logspace with numeric checks
         cumprod_1mp = safe_cumprod(1-p, dim=1)
@@ -402,7 +402,7 @@ class MTA(torch.nn.Module):
             self.mask = to_device(self, make_pad_mask(enc_hs_len))
         e.masked_fill_(self.mask, -float('inf'))
         # Optionally add pre-sigmoid noise to the scores
-        e += self.sigmoid_noise * to_device(self,torch.normal(mean=torch.zeros(score.shape), std=1))
+        e += self.sigmoid_noise * to_device(self,torch.normal(mean=torch.zeros(e.shape), std=1))
         p = torch.sigmoid(e)
         # safe_cumprod computes cumprod in logspace with numeric checks
         cumprod_1mp = safe_cumprod(1-p, dim=1)
