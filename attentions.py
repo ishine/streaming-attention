@@ -133,6 +133,7 @@ class MoChA(torch.nn.Module):
             self.chunk_gvec = torch.nn.Linear(att_dim, 1, bias=False)
         
         self.dunits = dunits
+        self.eprojs = eprojs
         self.att_dim = att_dim
         self.att_win = att_win
         self.sigmoid_noise = sigmoid_noise
@@ -340,6 +341,7 @@ class MTA(torch.nn.Module):
         self.monotonic_bias = torch.nn.Parameter(torch.Tensor(1,1)) # don't forget to initialize this to a negative value (e.g. -4.0)
         
         self.dunits = dunits
+        self.eprojs = eprojs
         self.att_dim = att_dim
         self.sigmoid_noise = sigmoid_noise
         self.score_bias_init = score_bias_init
@@ -479,7 +481,7 @@ class OnlineMTA(MTA):
         
         if flag:
             end_point = z
-            p = torch.sigmoid(e[:,end_point+1])
+            p = torch.sigmoid(e[:, :end_point+1])
             cumprod_1mp = safe_cumprod(1-p, dim=1)
             w = p * cumprod_1mp
             c = torch.sum(self.enc_h[:, :end_point+1] * w.view(batch, end_point+1, 1), dim=1)
