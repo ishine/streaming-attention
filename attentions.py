@@ -479,7 +479,7 @@ class OnlineMTA(MTA):
         
         if flag:
             end_point = z
-            p = torch.sigmoid(e[:,end_point+1])
+            p = torch.sigmoid(e[:, :end_point+1])
             cumprod_1mp = safe_cumprod(1-p, dim=1)
             w = p * cumprod_1mp
             c = torch.sum(self.enc_h[:, :end_point+1] * w.view(batch, end_point+1, 1), dim=1)
